@@ -3,6 +3,7 @@ import "./App.css";
 import Home from "./components/Home";
 import { Component } from "react";
 import { UserProfile, Login, Credits, Debits } from "./components/Index";
+console.log("inside app component");
 
 class App extends Component {
   constructor() {
@@ -26,12 +27,13 @@ class App extends Component {
     newUser.userName = logInInfo.userName;
     this.setState({ currentUser: newUser });
   };
-
+  /*
   async componentDidMount() {
     //more on fetch =>  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     try {
       //Url will grab the information from the debit and credit api and assign it to a varible.
       //at this point it is not readable.
+      //if I dont await, the url will be a promise object
       let debitUrl = await fetch("https://moj-api.herokuapp.com/debits");
       let creditUrl = await fetch("https://moj-api.herokuapp.com/credits");
       console.log("debitUrl\n");
@@ -47,11 +49,13 @@ class App extends Component {
       console.log(this.state.debitInfo);
       console.log("creditInfo\n");
       console.log(this.state.creditInfo);
+      console.log("0's debit amount");
+      console.log(this.state.debitInfo[0].amount);
     } catch (error) {
       console.log(error);
     }
   }
-
+*/
   render() {
     const HomeComponent = () => (
       <Home accountBalance={this.state.accountBalance} />
@@ -79,12 +83,7 @@ class App extends Component {
       ></Credits>
     );
 
-    const DebitsComponent = () => (
-      <Debits
-        debitInfo={this.state.debitInfo}
-        debitAmount={this.state.debitAmount}
-      ></Debits>
-    );
+    const DebitsComponent = () => <Debits></Debits>;
 
     return (
       <Router>
