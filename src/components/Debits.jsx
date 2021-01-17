@@ -7,66 +7,58 @@ export default class Debits extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      debitInfo: [],
+      debitDescription: "",
       debitAmount: "",
-      toggle: false
     }
   }
-
-  async componentDidMount() {
-    try {
-      let response = await axios.get(
-        'https://moj-api.herokuapp.com/debits'
-      );
-      let debits = response.data;
-      let totalDebit = 0;
-      for (let debit of debits){
-          this.state.debitInfo.push({
-            description: debit.description,
-            amount: debit.amount,
-            date: debit.date
-          })
-        totalDebit += debit.amount
-      }
-      this.props.addToBalance(totalDebit)
-      this.setState({
-        debitInfo: debits,
-        debitAmount: totalDebit
-      })
-    } catch (error) {
-      console.error(error);
-      }
-  }
-
-
-  displayDebit = (event) => {
-    let debits = this.state.debitInfo.map((debit) =>
+  displayDebits = () => {
+    
+    return (this.props.debits.map((debit) =>
       <DebitDisplay debitInfo={debit}/>
-    )
-    return debits
+    ))
   }
 
-  toggleDisplayEdit = () => {
-    if (this.state.toggle === false) { 
-      this.setState({ toggle: true }) 
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault()
+    if ((this.state.debitDescription != "") && this.state.debitDescription != "") {
+      this.props.addToBalance(this.state.debitAmount)
+      this.props.addToDebits({
+        description: this.state.debitDescription,
+        amount: this.state.debitAmount,
+        date: new Date().toString()
+      })
+      this.setState({
+        debitDescription: "",
+        debitAmount: "",
+      })
     } else {
-      this.setState({ toggle: false})
+      window.alert("Please enter a discription and an amount (in numbers)")
     }
-  } 
+  }
     
   render() {
     return (
       <div>
         <Link to="/">Home</Link>
-        <h1>Debits</h1>
-        <button>Account Balance</button>
-        <button onClick={this.toggleDisplayEdit}>Display Debit</button>
-        <button>Add Debit</button>
-        {this.state.toggle && (
-          <div>
-            <br /> {this.displayDebit()}
-          </div>
-        )}
+        <h1>Debits</h1> <br />
+        Account Balance: {this.props.accountBalance}
+        <form onSubmit={this.handleSubmit} className="add-depit">
+          <label> <br />
+            Description: <input type="text" name="debitDescription" value={this.state.debitDescription} onChange={this.handleChange} />
+          </label>  <br />
+          <label> <br />
+            Amount: <input type="number" name="debitAmount" value={this.state.debitAmount} onChange={this.handleChange} />
+          </label>  <br />
+          
+          <input class="button" type="submit" value="Submit" />
+      </form>
+        {this.displayDebits()}
       </div>
     );
   }

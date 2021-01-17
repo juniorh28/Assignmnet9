@@ -6,10 +6,12 @@ import { UserProfile, Login, Credits, Debits } from "./Index";
 import axios from 'axios'
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       accountBalance: 100,
+      debits: [],
+      credits: [],
       currentUser: {
         userName: "Billy Bob",
         memberSince: "01/01/2021",
@@ -17,18 +19,42 @@ class App extends Component {
     };
   }
 
-  addToBalance = amount => {
-    this.setState({
-      accountBalance: this.state.accountBalance + amount
-    })
-    console.log(this.state.accountBalance)
+  async componentDidMount() {
+    try {
+      let response = await axios.get('https://moj-api.herokuapp.com/debits');
+      let debits = response.data;
+      let totalDebit = 0;
+      for (let debit of debits){
+        totalDebit += debit.amount
+      }
+      this.setState({
+        debits: debits,
+        accountBalance: this.state.accountBalance + totalDebit
+      })
+    } catch (error) {
+      console.error(error);
+      }
   }
 
-  subFromBalance = (amount) => {
+  addToDebits = debit => {
+    console.log(debit)
+    let joined = this.state.debits.concat(debit)
     this.setState({
-      accountBalance: this.state.accountBalance - amount
+      debits: joined
+    })
+    console.log(this.state.debits)
+  }
+  addToBalance = amount => {
+    this.setState({
+      accountBalance: this.state.accountBalance + parseInt(amount)
     })
   }
+
+  // subFromBalance = (amount) => {
+  //   this.setState({
+  //     accountBalance: this.state.accountBalance - amount
+  //   })
+  // }
 
   mockLogIn = (logInInfo) => {
     const newUser = { ...this.state.currentUser };
@@ -60,7 +86,9 @@ class App extends Component {
     const DebitsComponent = () => (
       <Debits
         accountBalance={this.state.accountBalance}
+        debits={this.state.debits}
         addToBalance={this.addToBalance}
+        addToDebits={this.addToDebits}
       ></Debits>
     );
 
