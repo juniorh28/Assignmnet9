@@ -70,12 +70,12 @@ export default class Debits extends Component {
 
   render() {
     return (
-      <div>
+      <div class="debit">
         <Link to="/">Home</Link>
         <h1>Debits</h1>
-        <button onClick={this.accountBalance}>Account Balance</button>
-        <button onClick={this.displayDebit}>Display Debit</button>
-        <button>Add Debit</button>
+        <button class="accountBalanceClassDebit" onClick={this.accountBalance}>Account Balance</button>
+        <button class="displayDebitClass"onClick={this.displayDebit}>Display Debit</button>
+        <button class="addDebitClass">Add Debit</button>
       </div>
     );
   }

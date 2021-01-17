@@ -18,8 +18,8 @@ a {
 
 .credit {
     text-align: center;
-    background: lightgrey;
-    color: black;
+    background: aqua;
+    color: darkslategrey;
     width: 100%;
     height: 10%;
 }
@@ -59,8 +59,8 @@ a {
 
 .debit {
     text-align: center;
-    background: lightgrey;
-    color: black;
+    background: NavajoWhite;
+    color: Brown;
     width: 100%;
     height: 10%;
 }
@@ -100,7 +100,7 @@ a {
 
 .loginClass {
     text-align: center;
-    background: lightgrey;
+    background: lightblue;
     color: black;
     width: 100%;
     height: 10%;
@@ -119,17 +119,17 @@ a {
 
 .userProfileClass {
     text-align: center;
-    background: lightgrey;
-    color: black;
+    background: orange;
+    color: green;
     width: 100%;
     height: 10%;
 }
 
 .App {
     text-align: center;
-    background: lightgrey;
-    color: black;
+    background: lightgreen;
+    color: purple;
     width: 100%;
-    height: 10%;
+    height: 20%;
 }
 

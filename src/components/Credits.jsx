@@ -60,12 +60,12 @@ class Credits extends Component {
 
   render() {
     return (
-      <div>
+      <div class="credit">
         <Link to="/">Home</Link>
         <h1>Credits</h1>
-        <button>Account Balance</button>
-        <button>Display Credit</button>
-        <button>Add Credit</button>
+        <button class="accountBalanceClassCredit">Account Balance</button>
+        <button class="displayCreditClass">Display Credit</button>
+        <button class="addCreditClass">Add Credit</button>
       </div>
     );
   }

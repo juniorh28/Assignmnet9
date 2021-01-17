@@ -86,6 +86,7 @@ class App extends Component {
     const DebitsComponent = () => <Debits></Debits>;
 
     return (
+      <div class="App">
       <Router>
         <Switch>
           <Route exact path="/" render={HomeComponent}></Route>
@@ -98,6 +99,7 @@ class App extends Component {
           {/* <header className="App-header"></header>*/}
         </div>
       </Router>
+      </div>
     );
   }
 }

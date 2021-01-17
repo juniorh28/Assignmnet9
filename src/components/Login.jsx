@@ -31,7 +31,7 @@ class LogIn extends Component {
     }
 
     return (
-      <div>
+      <div class="loginClass">
         <form onSubmit={this.handleSubmit}>
           <div>
             <label htmlFor="userName">User Name</label>
@@ -46,7 +46,7 @@ class LogIn extends Component {
             <label htmlFor="password">Password</label>
             <input type="password" name="password" />
           </div>
-          <button>Log In</button>
+          <button class="loginButton">Log In</button>
         </form>
       </div>
     );
