@@ -1,81 +1,72 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios'
 import { DebitDisplay, AccountBalance } from "./Index";
 
 export default class Debits extends Component {
-  state = {
-    accountBalance: this.props.accountBalance,
-    debitInfo: [],
-    debitAmount: 0,
-    debitDisplay: false,
-  };
-
-  async componentDidMount() {
-    console.log("inside the componentDidMount");
-    //more on fetch =>  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    try {
-      //Url will grab the information from the debit and credit api and assign it to a varible.
-      //at this point it is not readable.
-      let debitUrl = await fetch("https://moj-api.herokuapp.com/debits");
-      console.log("debitUrl\n");
-      console.log(debitUrl);
-      this.setState({
-        //once recieved, .json allow you to make the data in the url readable.
-        debitInfo: await debitUrl.json(),
-      });
-      console.log("debitInfo\n");
-      console.log(this.state.debitInfo);
-      console.log("0's debit amount");
-      console.log(this.state.debitInfo[0].amount);
-    } catch (error) {
-      console.log(error);
+  constructor (props) {
+    super(props)
+    this.state = {
+      debitInfo: [],
+      debitAmount: "",
+      toggle: false
     }
   }
 
-  displayDebit = (e) => {
-    e.preventDefault();
-    console.log("inside the debit component. below me is the debit info");
-    this.setState({ debitInfo: this.state.debitInfo });
-    console.log(this.state.debitInfo);
-
-    if (this.state.debitDisplay) {
+  async componentDidMount() {
+    try {
+      let response = await axios.get(
+        'https://moj-api.herokuapp.com/debits'
+      );
+      let debits = response.data;
+      let totalDebit = 0;
+      for (let debit of debits){
+          this.state.debitInfo.push({
+            description: debit.description,
+            amount: debit.amount,
+            date: debit.date
+          })
+        totalDebit += debit.amount
+      }
+      this.props.addToBalance(totalDebit)
       this.setState({
-        debitDisplay: false,
-      });
-    } else {
-      this.setState({
-        debitDisplay: true,
-      });
-      /*
-      this.state.debitInfo.map((item) => {
-        console.log("below me is debit mapping");
+        debitInfo: debits,
+        debitAmount: totalDebit
       })
-     */
-      return <DebitDisplay debitInfo={this.state.debitInfo}></DebitDisplay>;
-      /**         
-       *  <DebitDisplay
-            description={item.description}
-            amount={item.amount}
-            date={item.date}
-          /> */
-      //return <DebitDisplay debitInfo={this.state.debitInfo} />;
+    } catch (error) {
+      console.error(error);
+      }
+  }
+
+
+  displayDebit = (event) => {
+    let debits = this.state.debitInfo.map((debit) =>
+      <DebitDisplay debitInfo={debit}/>
+    )
+    return debits
+  }
+
+  toggleDisplayEdit = () => {
+    if (this.state.toggle === false) { 
+      this.setState({ toggle: true }) 
+    } else {
+      this.setState({ toggle: false})
     }
-  };
-
-  accountBalance = () => {
-    <AccountBalance
-      accountBalance={this.props.accountBalance}
-    ></AccountBalance>;
-  };
-
+  } 
+    
   render() {
     return (
       <div>
         <Link to="/">Home</Link>
         <h1>Debits</h1>
-        <button onClick={this.accountBalance}>Account Balance</button>
-        <button onClick={this.displayDebit}>Display Debit</button>
+        <button>Account Balance</button>
+        <button onClick={this.toggleDisplayEdit}>Display Debit</button>
         <button>Add Debit</button>
+        {this.state.toggle && (
+          <div>
+            <br /> {this.displayDebit()}
+          </div>
+        )}
       </div>
     );
   }
