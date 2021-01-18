@@ -9,5 +9,4 @@ class AccountBalance extends Component {
     );
   }
 }
-
 export default AccountBalance;

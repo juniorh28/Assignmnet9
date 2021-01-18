@@ -1,9 +1,52 @@
+* {
+  background-color: #474a64 ;
+  color: white;
+}
+a {
+  color:skyblue;
+}
+.balance {
+  color:#A6E22E;
+  text-align-last: center;
+  vertical-align: middle;
+}
 .App {
   text-align: center;
+  background-color: #474a64;
 }
 
 .debit{
   align-items: center;
+}
+
+.button{
+  margin-bottom: 10px;
+}
+
+label {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.debit-display-card{
+  text-align: center;
+  background-color: #474a64;
+  width: 50%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin:0 auto;
+  border: 1px solid #A6E22E;
+}
+
+h1, h2{
+  color: #A6E22E;
+  text-align: center;
+  margin-bottom: 5px;
+}
+#form {
+  background-color: #474a64;
+  width: 50%;
+  margin: auto;
 }
 
 .App-logo {
@@ -29,7 +72,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #A6E22E;
 }
 
 @keyframes App-logo-spin {

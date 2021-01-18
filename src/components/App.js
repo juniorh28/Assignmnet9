@@ -9,7 +9,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accountBalance: 100,
+      accountBalance: 10000,
       debits: [],
       credits: [],
       currentUser: {
@@ -21,40 +21,52 @@ class App extends Component {
 
   async componentDidMount() {
     try {
-      let response = await axios.get('https://moj-api.herokuapp.com/debits');
+      let response = await axios.get("https://moj-api.herokuapp.com/debits");
       let debits = response.data;
+      response = await axios.get("https://moj-api.herokuapp.com/credits");
+      let credits = response.data;
       let totalDebit = 0;
-      for (let debit of debits){
-        totalDebit += debit.amount
+      let totalCredit = 0;
+      for (let debit of debits) {
+        totalDebit += debit.amount;
+      }
+      for (let credit of credits) {
+        totalCredit += credit.amount;
       }
       this.setState({
         debits: debits,
-        accountBalance: this.state.accountBalance + totalDebit
-      })
+        credits: credits,
+        accountBalance: this.state.accountBalance + totalDebit - totalCredit,
+      });
     } catch (error) {
       console.error(error);
-      }
+    }
   }
 
   addToDebits = debit => {
-    console.log(debit)
     let joined = this.state.debits.concat(debit)
     this.setState({
       debits: joined
     })
-    console.log(this.state.debits)
+  }
+
+  addToCredits = credit => {
+    let joined = this.state.credits.concat(credit)
+    this.setState({
+      credits: joined
+    })
   }
   addToBalance = amount => {
     this.setState({
       accountBalance: this.state.accountBalance + parseInt(amount)
     })
   }
+  subFromBalance = amount => {
+    this.setState({
+      accountBalance: this.state.accountBalance - parseInt(amount)
+    })
+  }
 
-  // subFromBalance = (amount) => {
-  //   this.setState({
-  //     accountBalance: this.state.accountBalance - amount
-  //   })
-  // }
 
   mockLogIn = (logInInfo) => {
     const newUser = { ...this.state.currentUser };
@@ -79,7 +91,10 @@ class App extends Component {
     );
     const CreditsComponent = () => (
       <Credits
-        accountBalance= {this.state.accountBalance}
+        accountBalance={this.state.accountBalance}
+        credits={this.state.credits}
+        subFromBalance={this.subFromBalance}
+        addToCredits={this.addToCredits}
       ></Credits>
     );
 
@@ -93,17 +108,19 @@ class App extends Component {
     );
 
     return (
-      <Router>
-        <Switch>
-          <Route exact path="/" render={HomeComponent}></Route>
-          <Route exact path="/UserProfile" render={UserProfileComponent}/>
-          <Route exact path="/Login" render={LogInComponent} />
-          <Route exact path="/Credits" render={CreditsComponent} />
-          <Route exact path="/Debits" render={DebitsComponent} />
-        </Switch>
-        <div className="App">
-        </div>
-      </Router>
+      <div className="App">
+        <Router>
+          <Switch>
+            <Route exact path="/" render={HomeComponent}></Route>
+            <Route exact path="/UserProfile" render={UserProfileComponent}/>
+            <Route exact path="/Login" render={LogInComponent} />
+            <Route exact path="/Credits" render={CreditsComponent} />
+            <Route exact path="/Debits" render={DebitsComponent} />
+          </Switch>
+          <div className="App">
+          </div>
+        </Router>
+      </div>
     );
   }
 }

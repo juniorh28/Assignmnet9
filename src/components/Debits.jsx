@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
-import { DebitDisplay, AccountBalance } from "./Index";
+import { DebitDisplay, } from "./Index";
 
 export default class Debits extends Component {
   constructor (props) {
@@ -9,12 +9,16 @@ export default class Debits extends Component {
     this.state = {
       debitDescription: "",
       debitAmount: "",
+    
     }
   }
+  
   displayDebits = () => {
-    
     return (this.props.debits.map((debit) =>
-      <DebitDisplay debitInfo={debit}/>
+      <div>
+        <DebitDisplay debitInfo={debit}/>
+        <br />
+      </div>
     ))
   }
 
@@ -26,7 +30,8 @@ export default class Debits extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault()
-    if ((this.state.debitDescription != "") && this.state.debitDescription != "") {
+    console.log("here", this.state.debitAmount)
+    if ((this.state.debitDescription != "") && (this.state.debitAmount != "")) {
       this.props.addToBalance(this.state.debitAmount)
       this.props.addToDebits({
         description: this.state.debitDescription,
@@ -45,19 +50,22 @@ export default class Debits extends Component {
   render() {
     return (
       <div>
+        <h1>Bank of React</h1>
+        <h2>Debits</h2>
+        Balance: <div className="balance">{this.props.accountBalance} </div>
         <Link to="/">Home</Link>
-        <h1>Debits</h1> <br />
-        Account Balance: {this.props.accountBalance}
-        <form onSubmit={this.handleSubmit} className="add-depit">
-          <label> <br />
-            Description: <input type="text" name="debitDescription" value={this.state.debitDescription} onChange={this.handleChange} />
-          </label>  <br />
-          <label> <br />
-            Amount: <input type="number" name="debitAmount" value={this.state.debitAmount} onChange={this.handleChange} />
-          </label>  <br />
-          
-          <input class="button" type="submit" value="Submit" />
-      </form>
+         <br />
+        <div id="form">
+            <form onSubmit={this.handleSubmit} className="add-depit">
+            <label> <br />
+              Description: <input type="text" name="debitDescription" value={this.state.debitDescription} onChange={this.handleChange} />
+            </label>  
+            <label> 
+              Amount: <input min="0" type="number" name="debitAmount" value={this.state.debitAmount} onChange={this.handleChange} />
+            </label>  
+            <input class="button" type="submit" value="Submit" /> 
+          </form>
+        </div>
         {this.displayDebits()}
       </div>
     );
