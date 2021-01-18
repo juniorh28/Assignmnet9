@@ -3,7 +3,7 @@ import "../App.css";
 import Home from "./Home";
 import { Component } from "react";
 import { UserProfile, Login, Credits, Debits } from "./Index";
-import axios from 'axios'
+import axios from "axios";
 
 class App extends Component {
   constructor(props) {
@@ -43,39 +43,40 @@ class App extends Component {
     }
   }
 
-  addToDebits = debit => {
-    let joined = this.state.debits.concat(debit)
+  addToDebits = (debit) => {
+    let joined = this.state.debits.concat(debit);
     this.setState({
-      debits: joined
-    })
-  }
+      debits: joined,
+    });
+  };
 
-  addToCredits = credit => {
-    let joined = this.state.credits.concat(credit)
+  addToCredits = (credit) => {
+    let joined = this.state.credits.concat(credit);
     this.setState({
-      credits: joined
-    })
-  }
-  addToBalance = amount => {
+      credits: joined,
+    });
+  };
+  addToBalance = (amount) => {
     this.setState({
-      accountBalance: this.state.accountBalance + parseInt(amount)
-    })
-  }
-  subFromBalance = amount => {
+      accountBalance: this.state.accountBalance + parseInt(amount),
+    });
+  };
+  subFromBalance = (amount) => {
     this.setState({
-      accountBalance: this.state.accountBalance - parseInt(amount)
-    })
-  }
-
+      accountBalance: this.state.accountBalance - parseInt(amount),
+    });
+  };
 
   mockLogIn = (logInInfo) => {
     const newUser = { ...this.state.currentUser };
     newUser.userName = logInInfo.userName;
     this.setState({ currentUser: newUser });
   };
- 
+
   render() {
-    const HomeComponent = () => ( <Home accountBalance={this.state.accountBalance} /> );
+    const HomeComponent = () => (
+      <Home accountBalance={this.state.accountBalance} />
+    );
     const UserProfileComponent = () => (
       <UserProfile
         userName={this.state.currentUser.userName}
@@ -111,14 +112,18 @@ class App extends Component {
       <div className="App">
         <Router>
           <Switch>
+            <Route
+              exact
+              path="/Assignmnet9"
+              render={() => <Redirect to="/" />}
+            />
             <Route exact path="/" render={HomeComponent}></Route>
-            <Route exact path="/UserProfile" render={UserProfileComponent}/>
+            <Route exact path="/UserProfile" render={UserProfileComponent} />
             <Route exact path="/Login" render={LogInComponent} />
             <Route exact path="/Credits" render={CreditsComponent} />
             <Route exact path="/Debits" render={DebitsComponent} />
           </Switch>
-          <div className="App">
-          </div>
+          <div className="App"></div>
         </Router>
       </div>
     );
